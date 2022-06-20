@@ -51,5 +51,22 @@ def parse_excel(
             .dropna(axis=1, how="all")
         )
 
-def get_keywords(filename: str, keyword_column_name: str):
-    pass
+
+def get_keywords(
+    filename: str,
+    keyword_column_name: str,
+    sheet: str = 0,
+    skiprows: int = 0,
+    header: int = None,
+):
+    if not keyword_column_name:
+        raise RuntimeError(
+            "Keyword column not selected! Please five an index or the column name."
+        )
+    df = parse_excel(filename, sheet, skiprows, header)
+    if isinstance(keyword_column_name, str):
+        return df.loc[:, keyword_column_name].tolist()
+    elif isinstance(keyword_column_name, int):
+        return df.iloc[:, keyword_column_name].tolist()
+    else:
+        raise TypeError("Keyword indication is neither a string nor an int!")

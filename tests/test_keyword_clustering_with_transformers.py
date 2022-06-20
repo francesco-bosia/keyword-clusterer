@@ -52,16 +52,48 @@ class TestKeyword_clustering_with_transformers(unittest.TestCase):
         """Test that xlsx files are read in correctly."""
         # Need to cut away the title!
         # Otherwise the line is interpreted as header.
-        table1 = parser.parse_excel("tests/test_table.xlsx", header=0, skiprows = 2)
+        table1 = parser.parse_excel("tests/test_table.xlsx", header=0, skiprows=2)
         should_values = ["AA", "BB", "CC", "DD", "EE", "FF"]
         for i, j in zip(should_values, table1.columns):
             assert i == j
         # If header is not given (= None), the column names will be
         # interpreted as part of the table!
-        table2 = parser.parse_excel("tests/test_table.xlsx", skiprows = 2)
+        table2 = parser.parse_excel("tests/test_table.xlsx", skiprows=2)
         for idx, i in enumerate(should_values):
             assert i == table2.iloc[0, idx]
 
     def test_002_raises_exception_if_filename_empty(self):
         """Test that parser throws if no file is given."""
         self.assertRaises(FileNotFoundError, parser.parse_excel, "")
+
+    def test_003_can_read_keywords_from_file(self):
+        keywords = parser.get_keywords(
+            "tests/test_table.xlsx", "AA", skiprows=2, header=0
+        )
+
+        should_keywords = [
+            "business model development",
+            "business model development process",
+            "business model development template",
+            "what is business model innovation",
+            "business model innovation case study",
+            "business model innovation examples",
+            "business model innovation framework",
+            "business model innovation",
+            "business innovation alignment model",
+            "business innovation model",
+            "business model innovation questions",
+            "business model innovation canvas",
+            "business model canvas channels",
+            "competitive advantage",
+            "cost structure business model canvas",
+            "customer journey",
+            "customer journey canvas",
+            "customer journey map",
+            "customer relationship",
+            "customer relationship business model canvas",
+            "customer segments",
+            "customer segments business model canvas",
+        ]
+        for i, j in zip(should_keywords, keywords):
+            assert i == j
