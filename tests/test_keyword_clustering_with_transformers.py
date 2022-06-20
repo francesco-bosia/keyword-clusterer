@@ -67,6 +67,7 @@ class TestKeyword_clustering_with_transformers(unittest.TestCase):
         self.assertRaises(FileNotFoundError, parser.parse_excel, "")
 
     def test_003_can_read_keywords_from_file(self):
+        """ Tests that the keywords are read in correctly. """
         keywords = parser.get_keywords(
             "tests/test_table.xlsx", "AA", skiprows=2, header=0
         )
