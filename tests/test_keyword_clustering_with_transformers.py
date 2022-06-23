@@ -195,3 +195,12 @@ class TestKeyword_clustering_with_transformers(unittest.TestCase):
             aic_scores.append(cluster.get_aic(model, self.fake_embeddings))
         # Check that the minimal AIC is with 3 clusters (fake data are tripartite)
         self.assertEqual(aic_scores.index(min(aic_scores)) + 1, 3)
+
+    def test_013_can_identify_elbow(self):
+        rss = [100, 60, 40, 20, 18, 17, 16]
+        self.assertEqual(cluster.find_elbow(rss[0]), 1)
+        self.assertEqual(cluster.find_elbow(rss[:1]), 1)
+        self.assertEqual(cluster.find_elbow(rss[:2]), 2)
+        self.assertEqual(cluster.find_elbow(rss[:3]), 2)
+        self.assertEqual(cluster.find_elbow(rss[:4]), 3)
+        self.assertEqual(cluster.find_elbow(rss), 4)
